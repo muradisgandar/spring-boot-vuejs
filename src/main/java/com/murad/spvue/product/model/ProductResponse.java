@@ -1,5 +1,6 @@
 package com.murad.spvue.product.model;
 
+import com.murad.spvue.product.domain.MoneyTypes;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,7 +21,7 @@ public class ProductResponse {
     private String deliveryIn;
     private BigDecimal price;
     private String categoryId;
-    private String moneyType;
+    private MoneyTypes moneyType;
 
 
 
