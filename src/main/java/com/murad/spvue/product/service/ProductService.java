@@ -1,6 +1,8 @@
 package com.murad.spvue.product.service;
 
 import com.murad.spvue.product.domain.MoneyTypes;
+import com.murad.spvue.product.domain.Product;
+import com.murad.spvue.product.domain.ProductImage;
 import com.murad.spvue.product.domain.es.ProductEs;
 import com.murad.spvue.product.model.ProductResponse;
 import com.murad.spvue.product.model.ProductSaveRequest;
@@ -14,23 +16,41 @@ import reactor.core.publisher.Flux;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductEsRepository productEsRepository;
     private final ProductRepository productRepository;
     private final ProductPriceService productPriceService;
     private final ProductDeliveryService productDeliveryService;
     private final ProductAmountService productAmountService;
     private final ProductImageService productImageService;
+    private final ProductEsService productEsService;
 
     public Flux<ProductResponse> getAll(){
-        return productEsRepository.findAll().map(this::mapToDto);
+        return productEsService.findAll().map(this::mapToDto);
     }
 
-    ProductResponse save(ProductSaveRequest productSaveRequest){
+    public ProductResponse save(ProductSaveRequest request){
+        Product product = Product.builder()
+                .active(Boolean.TRUE)
+                .code("PR0001")
+                .categoryId(request.getCategoryId())
+                .companyId(request.getSellerId())
+                .description(request.getDescription())
+                .features(request.getFeatures())
+                .name(request.getName())
+                .productImageList(request.getImages()
+                        .stream()
+                        .map(item -> new ProductImage(ProductImage.ImageType.FEATURE,item))
+                        .collect(Collectors.toList()))
+                .build();
+
+        product = productRepository.save(product).block();
+        productEsService.saveNewProduct(product);
+
         return null;
     }
 

@@ -1,10 +1,12 @@
 package com.murad.spvue.product.domain.es;
 
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 @Document(indexName = "product")
 @Data
+@Builder
 public class ProductEs {
 
     private String id;
