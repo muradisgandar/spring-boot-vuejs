@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -16,9 +17,8 @@ public class ProductEsService {
 
     private final ProductEsRepository productEsRepository;
 
-    @Async
-    public void saveNewProduct(Product product){
-        productEsRepository.save(ProductEs.builder()
+    public Mono<ProductEs> saveNewProduct(Product product){
+        return productEsRepository.save(ProductEs.builder()
                 .active(product.getActive())
                 .code(product.getCode())
                 .description(product.getDescription())
@@ -28,8 +28,8 @@ public class ProductEsService {
                 // TODO get company name and code
                 .seller(CompanyEs.builder().id(product.getCompanyId()).name("Test").build())
                 .category(CategoryEs.builder().id(product.getCategoryId()).name("Test").build())
-                .build()).block();
-        ;
+                .build());
+
     }
 
     public Flux<ProductEs> findAll() {
