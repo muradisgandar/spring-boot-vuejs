@@ -1,6 +1,7 @@
-package com.murad.spvue.product.model;
+package com.murad.spvue.product.model.product;
 
 import com.murad.spvue.product.domain.MoneyTypes;
+import com.murad.spvue.product.model.ProductSellerResponse;
 import lombok.Builder;
 import lombok.Data;
 

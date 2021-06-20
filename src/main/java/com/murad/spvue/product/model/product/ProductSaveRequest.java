@@ -1,4 +1,4 @@
-package com.murad.spvue.product.model;
+package com.murad.spvue.product.model.product;
 
 import com.murad.spvue.product.domain.MoneyTypes;
 import lombok.Builder;

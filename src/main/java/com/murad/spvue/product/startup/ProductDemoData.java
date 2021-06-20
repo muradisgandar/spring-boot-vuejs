@@ -1,11 +1,10 @@
 package com.murad.spvue.product.startup;
 
 import com.murad.spvue.product.domain.MoneyTypes;
-import com.murad.spvue.product.model.ProductSaveRequest;
+import com.murad.spvue.product.model.product.ProductSaveRequest;
 import com.murad.spvue.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
