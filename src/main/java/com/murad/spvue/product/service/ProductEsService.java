@@ -1,9 +1,11 @@
 package com.murad.spvue.product.service;
 
 import com.murad.spvue.product.domain.Product;
+import com.murad.spvue.product.domain.category.Category;
 import com.murad.spvue.product.domain.es.CategoryEs;
 import com.murad.spvue.product.domain.es.CompanyEs;
 import com.murad.spvue.product.domain.es.ProductEs;
+import com.murad.spvue.product.service.category.CategoryService;
 import com.murad.spvue.repository.ProductEsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -16,6 +18,7 @@ import reactor.core.publisher.Mono;
 public class ProductEsService {
 
     private final ProductEsRepository productEsRepository;
+    private final CategoryService categoryService;
 
     public Mono<ProductEs> saveNewProduct(Product product){
         return productEsRepository.save(ProductEs.builder()
@@ -27,9 +30,14 @@ public class ProductEsService {
                 .name(product.getName())
                 // TODO get company name and code
                 .seller(CompanyEs.builder().id(product.getCompanyId()).name("Test").build())
-                .category(CategoryEs.builder().id(product.getCategoryId()).name("Test").build())
+                .category(getProductCategory(product.getId()))
                 .build());
 
+    }
+
+    private CategoryEs getProductCategory(String id) {
+        Category category = categoryService.getById(id);
+        return CategoryEs.builder().name(category.getName()).id(category.getId()).code(category.getCode()).build();
     }
 
     public Flux<ProductEs> findAll() {
