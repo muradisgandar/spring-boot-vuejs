@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ProductPriceService productPriceService;
     private final ProductDeliveryService productDeliveryService;
     private final ProductAmountService productAmountService;
     private final ProductImageService productImageService;
@@ -40,6 +39,7 @@ public class ProductService {
                 .description(request.getDescription())
                 .features(request.getFeatures())
                 .name(request.getName())
+                .price(request.getPrice())
                 .productImageList(request.getImages()
                         .stream()
                         .map(item -> new ProductImage(ProductImage.ImageType.FEATURE,item))
@@ -53,13 +53,15 @@ public class ProductService {
     }
 
     private ProductResponse mapToDto(ProductEs item) {
+
+        System.out.println(item.getPrice());
         if(item == null){
             return null;
         }
 
-        BigDecimal productPrice = productPriceService.getByMoneyType(item.getId(), MoneyTypes.USD);
         return ProductResponse.builder()
-                .price(productPrice)
+                .price(item.getPrice().get("USD")) // null pointer throws
+                .moneySymbol(MoneyTypes.USD.getSymbol())
                 .name(item.getName())
                 .features(item.getFeatures())
                 .id(item.getId())
@@ -67,8 +69,7 @@ public class ProductService {
                 .deliveryIn(productDeliveryService.getDeliveryInfo(item.getId()))
                 .categoryId(item.getCategory().getId())
                 .available(productAmountService.getByProductId(item.getId()))
-                .freeDelivery(productDeliveryService.freeDeliveryCheck(item.getId(), productPrice))
-                .moneyType(MoneyTypes.USD)
+                .freeDelivery(productDeliveryService.freeDeliveryCheck(item.getId(), item.getPrice().get("USD"), MoneyTypes.USD))
                 .image(productImageService.getProductMainImage(item.getId()))
                 .seller(ProductSellerResponse.builder().id(item.getSeller().getId()).name(item.getSeller().getName()).build())
                 .build();

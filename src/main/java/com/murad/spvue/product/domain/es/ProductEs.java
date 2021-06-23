@@ -1,9 +1,14 @@
 package com.murad.spvue.product.domain.es;
 
+import com.murad.spvue.product.domain.MoneyTypes;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Document(indexName = "product")
 @Data
@@ -18,5 +23,6 @@ public class ProductEs {
     private CompanyEs seller;
     private String features;
     private CategoryEs category;
+    private Map<MoneyTypes, BigDecimal> price;
     private Boolean active;
 }

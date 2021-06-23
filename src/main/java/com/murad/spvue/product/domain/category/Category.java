@@ -3,9 +3,9 @@ package com.murad.spvue.product.domain.category;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(indexName = "category")
+@Document(collection = "category")
 @Data
 @Builder
 public class Category {

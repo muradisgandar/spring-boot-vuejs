@@ -1,5 +1,6 @@
 package com.murad.spvue.product.service;
 
+import com.murad.spvue.product.domain.MoneyTypes;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ public class ProductDeliveryService {
         return "Tomorrow";
     }
 
-    public boolean freeDeliveryCheck(String productId, BigDecimal price){
-        return price.compareTo(BigDecimal.ONE) >= 0;
+    public boolean freeDeliveryCheck(String productId, BigDecimal price, MoneyTypes moneyType){
+        return true;
     }
 }
