@@ -54,13 +54,12 @@ public class ProductService {
 
     private ProductResponse mapToDto(ProductEs item) {
 
-        System.out.println(item.getPrice());
         if(item == null){
             return null;
         }
 
         return ProductResponse.builder()
-                .price(item.getPrice().get("USD")) // null pointer throws
+                .price(BigDecimal.TEN) // null pointer throws
                 .moneySymbol(MoneyTypes.USD.getSymbol())
                 .name(item.getName())
                 .features(item.getFeatures())
@@ -69,7 +68,7 @@ public class ProductService {
                 .deliveryIn(productDeliveryService.getDeliveryInfo(item.getId()))
                 .categoryId(item.getCategory().getId())
                 .available(productAmountService.getByProductId(item.getId()))
-                .freeDelivery(productDeliveryService.freeDeliveryCheck(item.getId(), item.getPrice().get("USD"), MoneyTypes.USD))
+                .freeDelivery(productDeliveryService.freeDeliveryCheck(item.getId(), BigDecimal.TEN, MoneyTypes.USD))
                 .image(productImageService.getProductMainImage(item.getId()))
                 .seller(ProductSellerResponse.builder().id(item.getSeller().getId()).name(item.getSeller().getName()).build())
                 .build();

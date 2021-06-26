@@ -35,7 +35,7 @@
                       <input id="quantity" type="number" value="1" class="form-control quantity-input">
                     </div>
                     <div class="col-md-6 price">
-                      <span>{{item.moneyType}} {{item.money}} {{ item.price }}</span>
+                      <span>{{item.money}} {{item.price}} {{ item.moneySymbol }}</span>
                     </div>
                   </div>
                 </div>
@@ -62,10 +62,10 @@
 </template>
 
 <script>
-import {get} from "@/common/api.service";
+import {getAll} from "@/common/product.service";
 
 export default {
-  name: 'Product',
+  name: 'ProductListComponent',
   components: {},
   data() {
     return { products: [] };
@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     getProducts(){
-      get('products').then(response => {
+      getAll().then(response => {
         this.products = response.data;
       })
     }

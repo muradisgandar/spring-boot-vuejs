@@ -16,3 +16,12 @@ services:
       - 9300:9300
     environment:
       discovery.type: single-node
+
+  minio:
+    image: minio/minio
+    ports:
+      - 9000:9000
+    environment:
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: test1234
+    command: server /data
