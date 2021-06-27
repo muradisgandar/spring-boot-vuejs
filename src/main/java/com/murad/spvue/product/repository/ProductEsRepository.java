@@ -1,4 +1,4 @@
-package com.murad.spvue.repository;
+package com.murad.spvue.product.repository;
 
 import com.murad.spvue.product.domain.es.ProductEs;
 import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRepository;

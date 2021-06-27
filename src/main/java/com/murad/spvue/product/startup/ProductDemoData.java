@@ -6,7 +6,7 @@ import com.murad.spvue.product.model.category.CategorySaveRequest;
 import com.murad.spvue.product.model.product.ProductSaveRequest;
 import com.murad.spvue.product.service.ProductService;
 import com.murad.spvue.product.service.category.CategoryService;
-import com.murad.spvue.repository.ProductEsRepository;
+import com.murad.spvue.product.repository.ProductEsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
