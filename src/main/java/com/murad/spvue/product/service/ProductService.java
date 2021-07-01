@@ -83,4 +83,24 @@ public class ProductService {
     public Mono<ProductDetailResponse> getProductDetail(String id) {
         return this.mapToDto(productEsService.findById(id));
     }
+
+    private Mono<ProductDetailResponse> mapToDto(Mono<ProductEs> product) {
+
+        return product.map( item -> ProductDetailResponse.builder()
+                .price(BigDecimal.TEN) // null pointer throws
+                .moneySymbol(MoneyTypes.USD.getSymbol())
+                .name(item.getName())
+                .features(item.getFeatures())
+                .id(item.getId())
+                .description(item.getDescription())
+                .deliveryIn(productDeliveryService.getDeliveryInfo(item.getId()))
+                .categoryId(item.getCategory().getId())
+                .available(productAmountService.getByProductId(item.getId()))
+                .freeDelivery(productDeliveryService.freeDeliveryCheck(item.getId(), BigDecimal.TEN, MoneyTypes.USD))
+                .images(item.getImages())
+                .seller(ProductSellerResponse.builder().id(item.getSeller().getId()).name(item.getSeller().getName()).build())
+                .build());
+
+
+    }
 }

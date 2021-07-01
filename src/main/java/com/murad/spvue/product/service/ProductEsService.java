@@ -49,4 +49,8 @@ public class ProductEsService {
     public Flux<ProductEs> findAll() {
         return productEsRepository.findAll();
     }
+
+    public Mono<ProductEs> findById(String id) {
+        return productEsRepository.findById(id);
+    }
 }
