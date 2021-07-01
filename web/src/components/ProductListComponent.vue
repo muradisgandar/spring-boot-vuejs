@@ -7,14 +7,14 @@
             <div class="product">
               <div class="row">
                 <div class="col-md-3">
-                  <img class="img-fluid mx-auto d-block image" :src="item.image">
+                  <img class="img-fluid mx-auto d-block image" :src="getImageUrl(item.image)">
                 </div>
                 <div class="col-md-6">
                   <div class="info">
                     <div class="row">
                       <div class="col-md-5 product-name">
                         <div class="product-name">
-                          <a class="product-name" href="#">{{ item.name }}</a>
+                          <a class="product-name" v-bind:href="'/detail/' + item.id">{{ item.name }}</a>
                           <div class="product-info">
                             <div class="product-info-detail">{{ item.description }}</div>
                             <div class="product-info-detail">Seller: <a class="value" v-bind:href="item.seller.id">{{ item.seller.name }}</a>
@@ -63,6 +63,7 @@
 
 <script>
 import {getAll} from "@/common/product.service";
+import {BASE_URL} from "../common/config";
 
 export default {
   name: 'ProductListComponent',
@@ -78,7 +79,11 @@ export default {
       getAll().then(response => {
         this.products = response.data;
       })
+    },
+    getImageUrl(id) {
+      return BASE_URL + 'filestore/' + id;
     }
+
   }
 }
 </script>

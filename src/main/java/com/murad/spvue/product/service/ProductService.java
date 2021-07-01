@@ -4,6 +4,7 @@ import com.murad.spvue.product.domain.MoneyTypes;
 import com.murad.spvue.product.domain.Product;
 import com.murad.spvue.product.domain.ProductImage;
 import com.murad.spvue.product.domain.es.ProductEs;
+import com.murad.spvue.product.model.product.ProductDetailResponse;
 import com.murad.spvue.product.model.product.ProductResponse;
 import com.murad.spvue.product.model.product.ProductSaveRequest;
 import com.murad.spvue.product.model.ProductSellerResponse;
@@ -23,7 +24,6 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductDeliveryService productDeliveryService;
     private final ProductAmountService productAmountService;
-    private final ProductImageService productImageService;
     private final ProductEsService productEsService;
 
     public Flux<ProductResponse> getAll(){
@@ -69,7 +69,7 @@ public class ProductService {
                 .categoryId(item.getCategory().getId())
                 .available(productAmountService.getByProductId(item.getId()))
                 .freeDelivery(productDeliveryService.freeDeliveryCheck(item.getId(), BigDecimal.TEN, MoneyTypes.USD))
-                .image(productImageService.getProductMainImage(item.getId()))
+                .image(item.getImages().get(0))
                 .seller(ProductSellerResponse.builder().id(item.getSeller().getId()).name(item.getSeller().getName()).build())
                 .build();
 
@@ -78,5 +78,9 @@ public class ProductService {
 
     public Mono<Long> count() {
         return productRepository.count();
+    }
+
+    public Mono<ProductDetailResponse> getProductDetail(String id) {
+        return this.mapToDto(productEsService.findById(id));
     }
 }

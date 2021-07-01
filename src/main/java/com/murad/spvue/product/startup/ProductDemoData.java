@@ -4,11 +4,10 @@ import com.murad.spvue.filestore.service.FileStoreService;
 import com.murad.spvue.product.domain.MoneyTypes;
 import com.murad.spvue.product.model.category.CategoryResponse;
 import com.murad.spvue.product.model.category.CategorySaveRequest;
-import com.murad.spvue.product.model.product.ProductResponse;
 import com.murad.spvue.product.model.product.ProductSaveRequest;
+import com.murad.spvue.product.repository.ProductEsRepository;
 import com.murad.spvue.product.service.ProductService;
 import com.murad.spvue.product.service.category.CategoryService;
-import com.murad.spvue.product.repository.ProductEsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -17,12 +16,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.IntStream;
 
 import static java.util.UUID.randomUUID;
@@ -38,13 +37,14 @@ public class ProductDemoData {
     private final FileStoreService fileStoreService;
 
     @EventListener(ApplicationReadyEvent.class)
-    public void migrate() throws Exception{
+    public void migrate() {
         Long countOfData = productService.count().block();
+        assert countOfData != null;
         if (countOfData.equals(0L)) {
 
             productEsRepository.deleteAll();
 
-            CategoryResponse electronics = categoryService.save(CategorySaveRequest.builder().name("Electronics").build());
+            categoryService.save(CategorySaveRequest.builder().name("Electronics").build());
             CategoryResponse telephone = categoryService.save(CategorySaveRequest.builder().name("Telephone").build());
 
             IntStream.range(0, 20).forEach(item -> {
@@ -55,8 +55,13 @@ public class ProductDemoData {
 
                 String imageUUID = randomUUID().toString();
 
-                    byte[] bytes = Files.readAllBytes(ResourceUtils.getFile("classpath:phone.jpg").toPath());
-                    fileStoreService.saveImage(imageUUID, new ByteArrayInputStream(bytes));
+                byte[] file = null;
+                try {
+                    file = Files.readAllBytes(ResourceUtils.getFile("classpath:phone.jpg").toPath());
+                } catch (IOException e) {
+                    log.error("File read error: " + e);
+                }
+                fileStoreService.saveImage(imageUUID, new ByteArrayInputStream(file));
 
                 productService.save(
                         ProductSaveRequest.builder()
@@ -69,7 +74,6 @@ public class ProductDemoData {
                                 .features("<li>Black Color</li> <li>Aluminum Case</li> <li>2 Years Warranty</li> <li>5 Inch (35x55mm)</li>")
                                 .images(List.of(imageUUID))
                                 .build());
-
 
 
             });

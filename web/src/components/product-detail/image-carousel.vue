@@ -1,12 +1,22 @@
 <template>
+    <div v-for="imageId of images" v-bind:key="image">
+      <img class="d-block w-100" v-bind:src="getImageUrl(imageId)"
+           alt="test">
+    </div>
 
-    <img class="d-block w-100" src="https://productimages.hepsiburada.net/s/32/500/10352568139826.jpg"
-         alt="test">
 </template>
 
 <script>
+import {BASE_URL} from "../../common/config";
+
 export default {
-  name: "image-carousel"
+  name: "image-carousel",
+  props: ['images'],
+  methods: {
+    getImageUrl(id) {
+      return BASE_URL + 'filestore/' + id;
+    }
+  }
 }
 </script>
 
