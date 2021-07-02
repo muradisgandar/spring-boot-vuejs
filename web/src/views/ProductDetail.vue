@@ -10,7 +10,7 @@
               <image-carousel v-bind:images = productDetail.images></image-carousel>
             </div>
             <div class="col-md-7">
-              <features></features>
+              <features v-bind:productFeatures = productDetail.features></features>
             </div>
           </div>
         </div>
@@ -18,11 +18,11 @@
       </div>
 
       <div class="row">
-        <description></description>
+        <description v-bind:description = productDetail.description></description>
       </div>
 
       <div class="row">
-        <comments></comments>
+        <comments v-bind:productId = productDetail.id></comments>
       </div>
     </div>
   </div>
