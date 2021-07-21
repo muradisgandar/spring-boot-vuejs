@@ -1,5 +1,5 @@
 <template>
-    <div v-for="imageId of images" v-bind:key="image">
+    <div v-for="imageId of images" v-bind:key="imageId">
       <img class="d-block w-100" v-bind:src="getImageUrl(imageId)"
            alt="test">
     </div>
